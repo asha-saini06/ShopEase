@@ -28,7 +28,7 @@ img {
 }
 
 input {
-    color: #432000;
+    color: #450072;
     background-color: #DCE1EB;
     padding: 15px;
     border: none;
@@ -60,4 +60,28 @@ button:hover {
     background-color: #d24073;
     transition: 0.3s;
 
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+li {
+    list-style: none;
+    font-size: 20px;
+    padding: 10px;
+    margin: 10px;
+    background-color: #F1D3E3;
+    border-radius: 8px;
+    color: #782542;
+}
+
+.strike {
+    text-decoration: line-through;
 }
