@@ -4,6 +4,7 @@ import {
   ref,
   push,
   onValue,
+  remove,
 } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
 
 // Initialize Firebase
@@ -27,11 +28,11 @@ onValue(shoppingListInDB, function (snapshot) {
 
   // Loop through each product and add it to the list
   for (let i = 0; i < productsArray.length; i++) {
-    let currentProduct = productsArray[i]; // Get the current product
-    let currentItemID = currentProduct[0]; // Get the ID of the current product
-    let currentItemValue = currentProduct[1]; // Get the value of the current product
+    let currentItem = productsArray[i]; // Get the current product
+    let currentItemID = currentItem[0]; // Get the ID of the current product
+    let currentItemValue = currentItem[1]; // Get the value of the current product
 
-    addToList(currentItemValue); // Add each product to the list
+    addToList(currentItem); // Add each product to the list
   }
 });
 
@@ -41,8 +42,20 @@ function clearShoppingList() {
 }
 
 // Function to add an item to the shopping list
-function addToList(itemValue) {
-  shoppingList.innerHTML += `<li>${itemValue}</li>`;
+function addToList(item) {
+  let itemID = item[0];
+  let itemValue = item[1];
+
+  let listItem = document.createElement("li");
+  listItem.textContent = itemValue;
+
+  // Attach an event listener to the list item and make it console log the ID when it's pressed
+  listItem.addEventListener("click", function () {
+    let exactLocationOfItemInDB = ref(database, `products/${itemID}`);
+    remove(exactLocationOfItemInDB);
+  });
+
+  shoppingList.appendChild(listItem);
 }
 
 // Event listener for the add button
@@ -58,8 +71,8 @@ function clearList() {
 }
 
 // Function to toggle strike-through class on list items
-shoppingList.addEventListener("click", function (event) {
-  if (event.target.tagName === "LI") {
-    event.target.classList.toggle("strike");
-  }
-});
+// shoppingList.addEventListener("click", function (event) {
+//   if (event.target.tagName === "LI") {
+//     event.target.classList.toggle("strike");
+//   }
+// });
