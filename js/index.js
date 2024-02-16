@@ -23,16 +23,21 @@ const shoppingList = document.getElementById("shopping-list");
 
 // Listen for changes in the database
 onValue(shoppingListInDB, function (snapshot) {
-  let productsArray = Object.entries(snapshot.val());
-  clearShoppingList(); // Clear the list before adding new items
+  // Check if the snapshot exists
+  if (snapshot.exists()) {
+    let productsArray = Object.entries(snapshot.val());
+    clearShoppingList(); // Clear the list before adding new items
 
-  // Loop through each product and add it to the list
-  for (let i = 0; i < productsArray.length; i++) {
-    let currentItem = productsArray[i]; // Get the current product
-    let currentItemID = currentItem[0]; // Get the ID of the current product
-    let currentItemValue = currentItem[1]; // Get the value of the current product
+    // Loop through each product and add it to the list
+    for (let i = 0; i < productsArray.length; i++) {
+      let currentItem = productsArray[i]; // Get the current product
+      let currentItemID = currentItem[0]; // Get the ID of the current product
+      let currentItemValue = currentItem[1]; // Get the value of the current product
 
-    addToList(currentItem); // Add each product to the list
+      addToList(currentItem); // Add each product to the list
+    }
+  } else {
+    shoppingList.innerHTML = "No items in the list ... yet";
   }
 });
 
@@ -49,7 +54,6 @@ function addToList(item) {
   let listItem = document.createElement("li");
   listItem.textContent = itemValue;
 
-  // Attach an event listener to the list item and make it console log the ID when it's pressed
   listItem.addEventListener("click", function () {
     let exactLocationOfItemInDB = ref(database, `products/${itemID}`);
     remove(exactLocationOfItemInDB);
